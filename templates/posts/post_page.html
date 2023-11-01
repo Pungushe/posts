@@ -1,0 +1,38 @@
+{% extends "layouts/a_content.html" %}
+
+{% block content %}
+
+{% include "posts/post.html" %}
+
+{% if user.is_authenticated %}
+<div class="card !pb-0 -mt-3">
+    <form class="flex items-center p-4" autocomplete="off"
+        hx-post="{% url 'comment-sent' post.id %}"
+        hx-target="#tab-contents"
+        hx-swap="afterbegin"
+        _="on htmx:afterRequest reset() me"
+    >
+        {% csrf_token %}
+        {{ commentform }}
+        <button @click="open = false" class="block ml-2" type="submit">Подтвердить</button>
+    </form>
+</div>
+{% endif %}
+
+<div class="mb-20">
+    <div id="tabs" class="ml-4 flex gap-1 mb-4
+        {% if not post.comments.count %}hidden{% endif %}"
+        hx-target="#tab-contents" hx-target="innerHTML"
+        _="on htmx:afterLoad take .selected for event.target"
+    >
+        <a hx-get="{% url 'post-page' post.id %}" class="tab selected">Сперва новейшие</a>
+        <a hx-get="{% url 'post-page' post.id %}?top" class="tab">Лучшие комментарии</a>
+    </div>
+
+    <div id="tab-contents">
+        {% for comment in post.comments.all %}
+            {% include "comments/comment.html" %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

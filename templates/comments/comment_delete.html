@@ -1,0 +1,16 @@
+{% extends "layouts/b_content.html" %}
+
+{% block content %}
+
+<h1>Удалить комментарий</h1>
+
+{% include "comments/comment.html" %}
+
+<p class="my-6">Уверены что хотите удалить этот комментарий?</p>
+
+<form method='POST'>
+    {% csrf_token %}
+    <button type="submit">Подтвердить</button>
+    <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+</form>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "layouts/b_content.html" %}
+
+{% block content %}
+    <div class="md:flex items-center">
+        <div class="w-full md:max-w-sm mr-6 md:[&>*>*>p]:text-4xl">
+
+            {% include "posts/post.html" %}
+
+        </div>
+        <div>
+            <h1>Удалить пост</h1>
+            <p class="mb-6">Уверены, что хотите удалить этот пост?</p>
+
+            <form method='POST'>
+                {% csrf_token %}
+                <button type="submit">Подтвердить</button>
+                <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER }}">Назад</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

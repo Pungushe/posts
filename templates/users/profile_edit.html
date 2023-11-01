@@ -1,0 +1,45 @@
+{% extends "layouts/c_content.html" %}
+
+{% block content %}
+
+<h1 class="mb-2">Редактировать профиль</h1>
+<div class="text-center flex flex-col items-center">
+    <img id="avatar" class="w-36 h-36 rounded-full object-cover mb-4" src="{{ user.profile.avatar }}" />
+    <div class="text-center max-w-md">
+        <h1 id="realname">{{ user.profile.name }}</h1>
+        <div class="text-gray-400 mb-2 -mt-3">@{{ user.username }}</div>
+    </div>
+</div>
+<form method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{form.as_p}}
+    <button type="submit">Подтвердить</button>
+    <a class="button secondaryAction ml-1" href="{{ request.META.HTTP_REFERER}}">Отмена</a>
+</form>
+<a class="mt-12 hover:underline text-gray-500" href="{% url 'profile-delete' %}">Удалить профиль</a>
+
+<script>
+    
+    // Это обновит аватар
+    const fileInput = document.querySelector('input[type="file"]');
+
+    fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const image = document.querySelector('#avatar');
+
+    if (file && file.type.includes('image')) {
+        const url = URL.createObjectURL(file);
+        image.src = url;
+    }
+    });
+
+    // Это обновит имя
+    const realnameInput = document.getElementById('id_realname');
+    const realnameOutput = document.getElementById('realname');
+
+    realnameInput.addEventListener('input', (event) => {
+    realnameOutput.innerText = event.target.value;
+    });
+
+</script>
+{% endblock %}
